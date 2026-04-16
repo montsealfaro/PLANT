@@ -1,25 +1,66 @@
-import happy from "../assets/plants/happy.png"
-import ok from "../assets/plants/ok.png"
-import sad from "../assets/plants/sad.png"
-import wilted from "../assets/plants/wilted.png"
+import { useState, useEffect } from "react"
+import { plantImages } from "../config/plantImages"
+import Particles from "./Particles"
 
-const plantImages = {
-  happy,
-  ok,
-  sad,
-  wilted
-}
+export default function PlantDisplay({
+  stage,
+  sleeping,
+  playing,
+  personality
+}) {
+  const [current, setCurrent] = useState("happy")
+  const [prev, setPrev] = useState(null)
 
-export default function PlantDisplay({ stage }) {
-  const image = plantImages[stage]
+  let nextState = stage
+
+  if (stage === "wilted") {
+    nextState = "wilted"
+  } else if (sleeping) {
+    nextState = "sleeping"
+  } else if (playing) {
+    nextState = "playing"
+  }
+
+  useEffect(() => {
+    if (nextState === current) return
+
+    setPrev(current)
+
+    const change = setTimeout(() => {
+      setCurrent(nextState)
+    }, 100)
+
+    const clear = setTimeout(() => {
+      setPrev(null)
+    }, 400)
+
+    return () => {
+      clearTimeout(change)
+      clearTimeout(clear)
+    }
+  }, [nextState, current])
+
+  const currentSet = plantImages[personality] || plantImages["alegría"]
 
   return (
     <div className="plant-container">
+
+      {prev && (
+        <img
+          src={currentSet[prev]}
+          className="plant fade-out"
+          alt="previous"
+        />
+      )}
+
       <img
-        src={image}
-        alt={stage}
-        className={`plant plant-${stage}`}
+        key={current}
+        src={currentSet[current]}
+        className="plant fade-in"
+        alt="current"
       />
+
+      {playing && <Particles type="playing" />}
     </div>
   )
 }

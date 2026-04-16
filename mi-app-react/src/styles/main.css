@@ -1,17 +1,22 @@
+/* RESET */
 body {
   margin: 0;
   font-family: system-ui, sans-serif;
 }
 
+/* =========================
+   BACKGROUND DINÁMICO
+========================= */
 .background {
   min-height: 100vh;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: background 1s ease;
+  padding: 20px;
+  box-sizing: border-box;
+  transition: background 0.25s ease-in-out;
 }
-
-/* Estados emocionales del mundo */
 
 .background-happy {
   background: linear-gradient(#a8e6a3, #d4fcd2);
@@ -29,76 +34,800 @@ body {
   background: linear-gradient(#4b4b4b, #222);
 }
 
-/* Layout */
-
+/* =========================
+   APP CARD
+========================= */
 .app {
+  width: 100%;
+  max-width: 420px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
+  padding: 24px 16px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
 }
 
-/* Planta */
+/* =========================
+   NEEDS
+========================= */
+.needs-panel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
+.need-item span {
+  font-size: 12px;
+}
+
+.bar {
+  width: 100%;
+  height: 10px;
+  background: rgba(0,0,0,0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4caf50, #8bc34a);
+  transition: width 0.3s ease;
+}
+
+/* =========================
+   BOTONES
+========================= */
+.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.icon-wrapper {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* círculo SVG */
+.icon-wrapper svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  stroke-width: 8;
+}
+
+/* botón centrado */
+.icon-button {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+
+  width: 56px;
+  height: 56px;
+
+  border-radius: 50%;
+  border: none;
+  background: white;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 24px;
+  cursor: pointer;
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.icon-button:hover {
+  transform: scale(1.1);
+}
+
+/* =========================
+   MENSAJE
+========================= */
+.bubble {
+  background: white;
+  padding: 12px 18px;
+  border-radius: 16px;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* =========================
+   PLANTA (TRANSICIONES)
+========================= */
 .plant-container {
+  position: relative;
   width: 220px;
   height: 220px;
+  overflow: hidden;
 }
 
 .plant {
+  position: absolute;
+  top: 0;
+  left: 0;
+
   width: 100%;
-  transition: transform 0.5s ease;
+  height: 100%;
+  object-fit: contain;
+
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.plant-happy {
-  transform: scale(1.05);
+/* ENTRA */
+.fade-in {
+  opacity: 1;
+  transform: scale(1);
+  z-index: 2;
+  animation: fadeZoom 0.3s ease;
 }
 
-.plant-sad {
+/* SALE */
+.fade-out {
+  opacity: 0;
   transform: scale(0.95);
-  filter: saturate(70%);
+  z-index: 1;
 }
 
-.plant-wilted {
-  filter: grayscale(80%) brightness(60%);
+@keyframes fadeZoom {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-.status-panel {
-  background: rgba(255,255,255,0.8);
-  padding: 12px 20px;
-  border-radius: 12px;
+/* =========================
+   ESTADOS CRÍTICOS (ICONOS)
+========================= */
+
+/* peligro */
+.icon-wrapper.danger svg {
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+/* advertencia */
+.icon-wrapper.warning svg {
+  animation: shake 1.5s infinite;
+}
+
+@keyframes shake {
+  0% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+  100% { transform: rotate(-2deg); }
+}
+
+/* =========================
+   PARTICLES (EFECTOS)
+========================= */
+.particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.particles span {
+  position: absolute;
+  font-size: 18px;
+  opacity: 0;
+  animation: sparkle 1s ease forwards;
+}
+
+@keyframes sparkle {
+  0% {
+    transform: scale(0.5) translateY(0);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.2) translateY(-30px);
+    opacity: 0;
+  }
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 480px) {
+  .app {
+    padding: 20px 12px;
+  }
+}
+
+circle {
+  transition: stroke-dashoffset 0.35s ease;
+}
+
+.progress-ring {
+  transition: stroke-dashoffset 0.35s ease, filter 0.3s ease;
+}
+
+/* glow suave */
+.progress-ring.glow {
+  filter: drop-shadow(0 0 6px rgba(76, 175, 80, 0.6));
+}
+
+.icon-wrapper.danger .progress-ring {
+  filter: drop-shadow(0 0 6px rgba(244, 67, 54, 0.6));
+}
+
+
+.progress-ring {
+  transition: stroke-dashoffset 0.35s ease;
+  animation: pulseGlow 2s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+  0% {
+    filter: drop-shadow(0 0 4px rgba(255,255,255,0.2));
+  }
+  50% {
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.6));
+  }
+  100% {
+    filter: drop-shadow(0 0 4px rgba(255,255,255,0.2));
+  }
+}
+
+.icon-wrapper svg {
+  transition: filter 0.3s ease;
+}
+
+.icon-wrapper.danger svg {
+  filter: drop-shadow(0 0 12px rgba(244, 67, 54, 0.7));
+}
+
+.icon-wrapper.danger .icon-button {
+  animation: subtleScale 1.6s infinite ease-in-out;
+}
+
+@keyframes subtleScale {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.icon-wrapper.danger.fast svg {
+  animation: pulseGlow 1s infinite ease-in-out;
+}
+
+.icon-wrapper svg {
+  transition: filter 0.3s ease;
+}
+
+/* estado medio = leve aviso */
+.icon-wrapper.warning svg {
+  filter: drop-shadow(0 0 8px rgba(255, 152, 0, 0.5));
+}
+
+/* estado alto = limpio */
+.icon-wrapper:not(.warning):not(.danger) svg {
+  filter: none;
+}
+
+/* estado sin energía */
+.icon-wrapper.dead svg {
+  filter: drop-shadow(0 0 12px rgba(255, 0, 0, 0.9))
+          drop-shadow(0 0 24px rgba(255, 0, 0, 0.6));
+  animation: none; /* 🔥 importante: sin pulso */
+}
+
+.icon-wrapper.dead svg {
+  animation: none !important;
+}
+
+.icon-wrapper.dead .progress-ring {
+  opacity: 0.6;
+}
+
+.icon-wrapper.dead svg {
+  filter: grayscale(0.3)
+          drop-shadow(0 0 12px rgba(255, 0, 0, 0.9));
+}
+
+.icon-wrapper.dead .progress-ring {
+  stroke-dashoffset: calc(var(--circumference) * 0.97);
+}
+
+.icon-wrapper.dying svg {
+  animation: collapseRing 0.7s ease-out;
+}
+
+.icon-wrapper.dead svg {
+  filter: drop-shadow(0 0 12px rgba(255, 0, 0, 0.9))
+          drop-shadow(0 0 24px rgba(255, 0, 0, 0.6));
+  animation: none !important;
+}
+
+.bg-warning {
+  filter: brightness(0.9);
+}
+
+.bg-dead {
+  filter: brightness(0.6) saturate(0.7);
+}
+
+.frame {
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.plant {
+  filter: hue-rotate(var(--pet-color));
+}
+
+/* 🌫 niebla base */
+.fade-step {
+  opacity: 0;
+  filter: blur(20px);
+  transform: translateY(20px);
+  animation: fadeInFog 0.8s ease forwards;
+}
+
+.fade-out {
+  animation: fadeOutFog 0.6s ease forwards;
+}
+
+@keyframes fadeInFog {
+  to {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translateY(0px);
+  }
+}
+
+@keyframes fadeOutFog {
+  to {
+    opacity: 0;
+    filter: blur(20px);
+    transform: translateY(-20px);
+  }
+}
+
+/* 🧠 centrado total pantalla */
+.center-screen {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ✨ estética */
+.onboarding-card {
+  padding: 40px;
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 40px rgba(0,0,0,0.2);
   text-align: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-.status-panel p {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
+.options {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.status-panel small {
-  color: #555;
-}
-
-.water-button {
-  background: #4fc3f7;
-  border: none;
-  border-radius: 999px;
-  padding: 14px 28px;
-  font-size: 18px;
-  cursor: pointer;
+.options button {
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: 1px solid #ffffff30;
+  background: transparent;
   color: white;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-.water-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+.options button:hover {
+  background: #ffffff20;
 }
 
-.water-button:active {
-  transform: translateY(1px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+.options button.selected {
+  background: white;
+  color: black;
+}
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+}
+
+.onboarding {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0f172a;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  padding: 40px;
+  border-radius: 20px;
+  width: 320px;
+  text-align: center;
+  color: white;
+}
+
+
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.fade {
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+  }
+}
+
+.game-container {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  background: #222;
+  overflow: hidden;
+}
+
+.player {
+  position: absolute;
+  left: 50px;
+  width: 40px;
+  height: 40px;
+  background: lime;
+  border-radius: 8px;
+}
+
+.enemy {
+  position: absolute;
+  bottom: 0;
+  width: 30px;
+  height: 30px;
+  background: red;
+}
+
+.platform {
+  position: absolute;
+  background: #654321;
+  border-radius: 6px;
+}
+
+.game-container {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  background: #222;
+  overflow: hidden;
+}
+
+.floating-reward {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 26px;
+  font-weight: bold;
+  animation: floatUp 1.5s ease-out forwards;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-40px) scale(1);
+  }
+}
+
+.game-container {
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  gap: 8px;
+  max-width: 300px;
+  margin: 20px auto;
+}
+
+.cell {
+  width: 100%;
+  aspect-ratio: 1;
+  background: #444;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.cell.active {
+  background: #00ffcc;
+}
+
+.phone {
+  width: 100%;
+  max-width: 430px;
+  height: 100vh;
+  margin: 0 auto;
+}
+
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 30px;
+}
+
+.background {
+  height: 100%;
+}
+
+/* =========================
+   📱 BASE
+========================= */
+
+.phone {
+  width: 100%;
+  max-width: 420px;
+  height: 100vh;
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+  background: black;
+}
+
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+/* =========================
+   🎬 ANIMACIONES
+========================= */
+
+.modal-enter {
+  animation: modalIn 0.35s ease;
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================
+   🎮 MENU
+========================= */
+
+.menu-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+}
+
+/* =========================
+   👉 SWIPE iOS
+========================= */
+
+.swipe-container {
+  position: absolute;
+  inset: 0;
+  touch-action: pan-y;
+}
+
+.swipe-content {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.25s ease;
+  will-change: transform;
+  background: inherit;
+}
+
+.swipe-closing {
+  transition: transform 0.2s ease-out;
+}
+
+/* sombra lateral */
+.swipe-shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(to right, rgba(0,0,0,0.3), transparent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+/* =========================
+   ✨ FLOATING REWARD
+========================= */
+
+.floating-reward {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  animation: floatUp 1.5s ease forwards;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -40px);
+  }
+}
+
+/* =========================
+   🎮 FULLSCREEN GAME
+========================= */
+
+.game-fullscreen {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: black;
+  z-index: 999;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.game-fullscreen {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.pattern-game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.grid {
+  width: 100%;
+  height: 70%;
+}
+
+.game-fullscreen {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: black;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden;
+}
+
+/* 🔥 CONTENEDOR INTERNO */
+.game-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pattern-game h2 {
+  color: #00ffff;
+  text-shadow:
+    0 0 5px #00ffff,
+    0 0 10px #00ffff,
+    0 0 20px #00ffff,
+    0 0 40px #00ffff;
+}
+
+.pattern-game p {
+  color: #ff00ff;
+  text-shadow:
+    0 0 5px #ff00ff,
+    0 0 10px #ff00ff,
+    0 0 20px #ff00ff;
+}
+
+.pattern-game button {
+  background: black;
+  color: #00ff99;
+  border: 1px solid #00ff99;
+  box-shadow:
+    0 0 5px #00ff99,
+    0 0 10px #00ff99;
 }
