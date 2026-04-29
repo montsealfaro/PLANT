@@ -7,7 +7,6 @@ import Game3 from "./games/game3/Game3"
 export default function MiniGamesMenu({ onClose, onReward }) {
   const [activeGame, setActiveGame] = useState(null)
 
-  // 🧠 SWIPE STATE
   const startX = useRef(0)
   const lastX = useRef(0)
   const lastTime = useRef(0)
@@ -24,7 +23,7 @@ export default function MiniGamesMenu({ onClose, onReward }) {
   const PREDICTION_FACTOR = 220
 
   const handleStart = (x) => {
-    if (activeGame) return // 🚫 no swipe dentro del juego
+    if (activeGame) return
     if (x > EDGE_SIZE) return
 
     startX.current = x
@@ -79,46 +78,33 @@ export default function MiniGamesMenu({ onClose, onReward }) {
     currentX.current = 0
   }
 
-  // 🎮 GAME 1
   if (activeGame === "game1") {
     return (
       <Game1
         onExit={() => setActiveGame(null)}
-        onWin={() => {
-          onReward("social", 10)
-          setActiveGame(null)
-        }}
+        onReward={onReward}
       />
     )
   }
 
-  // 🧩 GAME 2
   if (activeGame === "game2") {
     return (
       <Game2
         onExit={() => setActiveGame(null)}
-        onWin={(score = 0) => {
-          onReward("social", score)
-          setActiveGame(null)
-        }}
+        onWin={onReward}
       />
     )
   }
 
-  // ☁️ GAME 3
   if (activeGame === "game3") {
     return (
       <Game3
         onExit={() => setActiveGame(null)}
-        onLose={(score = 0) => {
-          onReward("energy", Math.min(20, score))
-          setActiveGame(null)
-        }}
+        onReward={onReward}
       />
     )
   }
 
-  // 📋 MENÚ CON SWIPE
   return (
     <div
       className="swipe-container"
@@ -156,7 +142,9 @@ export default function MiniGamesMenu({ onClose, onReward }) {
             ☁️ Plataformas
           </button>
 
-          <button onClick={onClose}>Cerrar</button>
+          <button onClick={onClose}>
+            Cerrar
+          </button>
         </div>
       </div>
     </div>

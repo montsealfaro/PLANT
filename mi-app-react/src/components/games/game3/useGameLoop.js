@@ -1,16 +1,31 @@
-// useGameLoop.js
 import { useEffect, useRef } from "react"
 
-export function useGameLoop(callback) {
-  const requestRef = useRef()
-
-  const loop = () => {
-    callback()
-    requestRef.current = requestAnimationFrame(loop)
-  }
+export function useGameLoop(callback, running = true) {
+  const requestRef = useRef(null)
+  const callbackRef = useRef(callback)
 
   useEffect(() => {
+    callbackRef.current = callback
+  }, [callback])
+
+  useEffect(() => {
+    if (!running) return
+
+    let active = true
+
+    const loop = () => {
+      if (!active) return
+      callbackRef.current()
+      requestRef.current = requestAnimationFrame(loop)
+    }
+
     requestRef.current = requestAnimationFrame(loop)
-    return () => cancelAnimationFrame(requestRef.current)
-  }, [])
+
+    return () => {
+      active = false
+      if (requestRef.current) {
+        cancelAnimationFrame(requestRef.current)
+      }
+    }
+  }, [running])
 }

@@ -6,7 +6,7 @@ import useGameLoop from "./useGameLoop"
 import { updatePlayer, updateEnemies } from "./physics"
 
 const WIDTH = 390
-const HEIGHT = 844
+const HEIGHT = 800
 const biomeColors = {
   sky: "linear-gradient(#87CEEB, #e0f7ff)",
   forest: "linear-gradient(#2e8b57, #98fb98)",
@@ -119,7 +119,7 @@ for (let i = 0; i < totalPlatforms; i++) {
   }
 }
 
-export default function Game({ onExit }) {
+export default function Game({ onExit, onReward }){
   const [levelIndex, setLevelIndex] = useState(0)
   const [level, setLevel] = useState(generateLevel(0))
   const [enemies, setEnemies] = useState(level.enemies)
@@ -210,7 +210,10 @@ setLevel(prevLevel => ({
         if (updated.y > 900) {
           setLives(l => {
             const newLives = l - 1
-            if (newLives <= 0) setGameOver(true)
+            if (newLives <= 0) {
+            onReward?.("game1", score)
+            setGameOver(true)
+          }
             return newLives
           })
 
@@ -394,6 +397,7 @@ setLevel(prevLevel => ({
             justifyContent: "center",
             alignItems: "center",
             color: "white"
+            
           }}>
             <h1>Game Over</h1>
             <p>Puntos: {score}</p>
