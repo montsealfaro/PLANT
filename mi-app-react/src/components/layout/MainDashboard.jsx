@@ -20,7 +20,9 @@ export default function MainDashboard({
   onOpenCalendar,
   joyPoints,
   dateString,
-  timeString
+  timeString,
+  joyLevel,
+  joyProgress,
 }) {
   return (
     <div className="dashboard">
@@ -32,8 +34,53 @@ export default function MainDashboard({
         </button>
 
         <div className="joy-display">
-          ☀️ {joyPoints}
-        </div>
+  <div style={{ position: "relative", width: 50, height: 50 }}>
+    
+    <svg width="50" height="50">
+      <circle
+        cx="25"
+        cy="25"
+        r="20"
+        stroke="#eee"
+        strokeWidth="4"
+        fill="none"
+      />
+      <circle
+        cx="25"
+        cy="25"
+        r="20"
+        stroke="#FFD54F"
+        strokeWidth="4"
+        fill="none"
+        strokeLinecap="round"
+        strokeDasharray={2 * Math.PI * 20}
+        strokeDashoffset={
+          2 * Math.PI * 20 - (joyProgress / 100) * (2 * Math.PI * 20)
+        }
+        style={{
+          transition: "stroke-dashoffset 0.4s ease"
+        }}
+      />
+    </svg>
+
+    <div
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: 12,
+        fontWeight: "bold"
+      }}
+    >
+      {joyLevel}
+    </div>
+  </div>
+</div>
       </div>
 
       {/* 🔥 FECHA NUEVA (sin inline styles) */}

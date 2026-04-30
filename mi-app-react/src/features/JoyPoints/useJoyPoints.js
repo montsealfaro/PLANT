@@ -1,33 +1,42 @@
-import { useEffect, useState } from "react"
-import { getStoredJoyPoints, saveJoyPoints } from "./joyPointsService"
+import { useState, useEffect } from "react"
+
+const STORAGE_KEY = "joyPoints"
 
 export default function useJoyPoints() {
-  const [joyPoints, setJoyPoints] = useState(0)
+  const [state, setState] = useState(() => {
+    const saved = localStorage.getItem(STORAGE_KEY)
+    return saved
+      ? JSON.parse(saved)
+      : { level: 1, progress: 0, total: 0 }
+  })
 
   useEffect(() => {
-    setJoyPoints(getStoredJoyPoints())
-  }, [])
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+  }, [state])
 
-  const addJoyPoints = (amount) => {
-    setJoyPoints((prev) => {
-      const updated = prev + amount
-      saveJoyPoints(updated)
-      return updated
-    })
-  }
+  function addJoyPoints(amount) {
+    setState(prev => {
+      let newProgress = prev.progress + amount
+      let newLevel = prev.level
+      let newTotal = (prev.total || 0) + amount
 
-  const spendJoyPoints = (amount) => {
-    setJoyPoints((prev) => {
-      if (prev < amount) return prev
-      const updated = prev - amount
-      saveJoyPoints(updated)
-      return updated
+      while (newProgress >= 100) {
+        newProgress -= 100
+        newLevel += 1
+      }
+
+      return {
+        level: newLevel,
+        progress: newProgress,
+        total: newTotal
+      }
     })
   }
 
   return {
-    joyPoints,
-    addJoyPoints,
-    spendJoyPoints
+    joyPoints: state.total || 0, // 👈 lo que ya usabas
+    level: state.level,
+    progress: state.progress,
+    addJoyPoints
   }
 }

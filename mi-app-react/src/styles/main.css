@@ -4,6 +4,7 @@ body {
   font-family: system-ui, sans-serif;
 }
 
+
 /* =========================
    BACKGROUND DINÁMICO
 ========================= */
@@ -807,29 +808,34 @@ canvas {
 }
 
 .pattern-game h2 {
-  color: #00ffff;
-  text-shadow:
-    0 0 5px #00ffff,
-    0 0 10px #00ffff,
-    0 0 20px #00ffff,
-    0 0 40px #00ffff;
+  color: #F0725C; /* coral */
+  font-weight: 800;
+  letter-spacing: 0.5px;
 }
 
 .pattern-game p {
-  color: #ff00ff;
-  text-shadow:
-    0 0 5px #ff00ff,
-    0 0 10px #ff00ff,
-    0 0 20px #ff00ff;
+  color: #444; /* gris suave */
+  font-weight: 500;
 }
 
+/* botón principal */
 .pattern-game button {
-  background: black;
-  color: #00ff99;
-  border: 1px solid #00ff99;
-  box-shadow:
-    0 0 5px #00ff99,
-    0 0 10px #00ff99;
+  background: linear-gradient(135deg, #F282A7, #F0725C);
+  color: white;
+  border: none;
+  border-radius: 16px;
+  padding: 12px 20px;
+  font-weight: 600;
+  cursor: pointer;
+
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+  transition: all 0.2s ease;
+}
+
+/* hover suave */
+.pattern-game button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 18px rgba(0,0,0,0.2);
 }
 
 .dashboard {
@@ -2122,4 +2128,120 @@ button {
   --mood-3: #eab308; /* neutro */
   --mood-4: #84cc16; /* bien */
   --mood-5: #22c55e; /* muy bien */
+}
+
+
+/* =========================
+   🎮 GAME 2 - NUEVA PALETA
+========================= */
+
+.game-fullscreen {
+  background: linear-gradient(135deg, var(--c1), var(--c2));
+}
+
+.pattern-game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  color: var(--text-dark);
+  font-family: system-ui, sans-serif;
+}
+
+/* título */
+.pattern-game h2 {
+  color: var(--c5);
+  font-weight: 800;
+}
+
+/* texto */
+.pattern-game p {
+  color: #333;
+}
+
+/* grid */
+.grid {
+  display: grid;
+  gap: 10px;
+  width: min(85vw, 360px);
+  aspect-ratio: 1 / 1;
+}
+
+/* celda base */
+.cell {
+  background: rgba(255,255,255,0.6);
+  border-radius: 16px;
+  border: 2px solid rgba(0,0,0,0.08);
+  backdrop-filter: blur(6px);
+  transition: all 0.2s ease;
+}
+
+/* patrón */
+.cell.active {
+  background: var(--c3);
+  box-shadow: 0 0 12px var(--c3);
+}
+
+/* click */
+.cell.clicked {
+  background: var(--c5);
+  box-shadow: 0 0 12px var(--c5);
+}
+
+/* botón */
+.pattern-game button {
+  padding: 12px 20px;
+  border-radius: 16px;
+  border: none;
+  background: var(--c4);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  transition: 0.2s;
+}
+
+.pattern-game button:hover {
+  transform: translateY(-2px);
+}
+
+/* GAME OVER CARD */
+.gameover-card {
+  background: white;
+  border-radius: 24px;
+  padding: 28px;
+  text-align: center;
+  width: 280px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
+.gameover-card h2 {
+  color: var(--c5);
+}
+
+.gameover-card button:first-child {
+  background: var(--c5);
+  color: white;
+}
+
+.gameover-card button:last-child {
+  background: var(--c2);
+  color: #333;
+}
+
+:root {
+  --c1: #B3DFEC;
+  --c2: #B9C0EA;
+  --c3: #E8A5CC;
+  --c4: #F282A7;
+  --c5: #F0725C;
+  --c6: #F6AC5A;
+
+  --bg-main: linear-gradient(135deg, var(--c1), var(--c2));
+  --bg-soft: rgba(255,255,255,0.6);
+  --text-dark: #2a2a2a;
+}
+
+.game-fullscreen {
+  background: linear-gradient(135deg, #B3DFEC, #FFE1E7);
 }

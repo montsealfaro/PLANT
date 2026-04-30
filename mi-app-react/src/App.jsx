@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react"
+
+import { useState, useEffect, useRef } from "react" // 👈 agregado useRef
 
 import usePlant from "./hooks/usePlant"
 import usePetIdentity from "./hooks/usePetIdentity"
@@ -28,7 +29,7 @@ export default function App() {
   const [showCalendar, setShowCalendar] = useState(false) // 🔥 NUEVO
   const [floatingReward, setFloatingReward] = useState(null)
 
-  const { joyPoints, addJoyPoints } = useJoyPoints()
+  const { joyPoints, level, progress, addJoyPoints } = useJoyPoints()
 
   const { dateString, timeString } = useLocalTime()
   const { saveDailyEntry } = useDailyHistory()
@@ -57,6 +58,26 @@ useEffect(() => {
     saveDailyEntry({ mood: dailyMood })
   }
 }, [dailyMood])
+
+const prevLevel = useRef(level)
+
+useEffect(() => {
+  if (level > prevLevel.current) {
+    triggerLevelUp()
+  }
+  prevLevel.current = level
+}, [level])
+
+function triggerLevelUp() {
+  setFloatingReward({
+    type: "levelUp",
+    amount: level
+  })
+
+  setTimeout(() => {
+    setFloatingReward(null)
+  }, 2000)
+}
 
   const handleGameReward = (gameId, score) => {
     const joyEarned = convertScoreToJoy(gameId, score)
@@ -199,6 +220,8 @@ useEffect(() => {
             dailyMood={dailyMood}
             isSleeping={isSleeping}
             isPlaying={isPlaying}
+            joyLevel={level}
+            joyProgress={progress}
             needs={needs}
             onDrink={drinkWater}
             onFeed={feedPet}
@@ -215,7 +238,10 @@ useEffect(() => {
 
           {floatingReward && (
             <div className="floating-reward">
-              +{floatingReward.amount}
+              {floatingReward.type === "levelUp"
+            ? `LEVEL UP ✨ Lv.${floatingReward.amount}`
+            : `+${floatingReward.amount}`
+              }
             </div>
           )}
         </div>

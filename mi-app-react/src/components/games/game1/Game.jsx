@@ -384,27 +384,106 @@ setLevel(prevLevel => ({
         }} />
 
         {/* GAME OVER */}
-        {gameOver && (
-          <div style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            background: "rgba(0,0,0,0.7)",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            color: "white"
-            
-          }}>
-            <h1>Game Over</h1>
-            <p>Puntos: {score}</p>
-            <button onClick={restart}>Reintentar</button>
-            <button onClick={onExit}>Salir</button>
-          </div>
-        )}
+{gameOver && (
+  <div style={{
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    background: "rgba(0,0,0,0.55)",
+    backdropFilter: "blur(6px)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 10
+  }}>
+
+    {/* CARD */}
+    <div style={{
+      width: "80%",
+      maxWidth: 320,
+      background: "#ffffff",
+      borderRadius: 24,
+      padding: "30px 20px",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      gap: 14,
+      boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
+      animation: "scaleIn 0.25s ease"
+    }}>
+
+      <h2 style={{ margin: 0, fontSize: 28, color: "#000" }}>
+        ¡Perdiste!
+      </h2>
+
+      <p style={{ margin: 0, fontSize: 16, color: "#333" }}>
+        Score: {score}
+      </p>
+
+      <p style={{ margin: 0, fontSize: 14, color: "#666" }}>
+        Energía ganada: {Math.floor(score / 1000)}
+      </p>
+
+      {/* BOTONES */}
+      <div style={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        gap: 10,
+        marginTop: 10
+      }}>
+        <button
+          onClick={restart}
+          style={{
+            padding: "12px",
+            borderRadius: 14,
+            border: "none",
+            fontWeight: "bold",
+            background: "#111",
+            color: "#fff",
+            cursor: "pointer"
+          }}
+        >
+          Reintentar
+        </button>
+
+        <button
+          onClick={onExit}
+          style={{
+            padding: "12px",
+            borderRadius: 14,
+            border: "none",
+            fontWeight: "bold",
+            background: "#e5e5e5",
+            color: "#000",
+            cursor: "pointer"
+          }}
+        >
+          Salir
+        </button>
+      </div>
+    </div>
+
+    {/* animación simple inline */}
+    <style>
+      {`
+        @keyframes scaleIn {
+          from {
+            transform: scale(0.9);
+            opacity: 0;
+          }
+          to {
+            transform: scale(1);
+            opacity: 1;
+          }
+        }
+      `}
+    </style>
+
+  </div>
+)}
 
       </div>
     </div>
