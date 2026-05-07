@@ -23,97 +23,113 @@ export default function OnboardingFlow({ onFinish, mode = "setup" }) {
   const next = () => setStep(step + 1)
 
   return (
-    <div className="onboarding">
+    <div className="onboarding-overlay">
 
-      {/* STEP 0 */}
-      {step === 0 && (
-        <div className="card fade">
-          <h2>Hola 👋 ¿Cómo estás?</h2>
+      <div className="onboarding-phone">
 
-          <div className="options">
-            <button className="onboarding-button" onClick={next}>Bien!</button>
-            <button className="onboarding-button" onClick={next}>Prefiero no decirlo...</button>
-          </div>
-        </div>
-      )}
+        <div className="onboarding-card">
 
-      {/* STEP 1 - EMOCIÓN */}
-      {step === 1 && (
-        <div className="card fade">
-          <h2>¿Qué emoción te representa?</h2>
+          {/* STEP 0 */}
+          {step === 0 && (
+            <>
+              <h2 className="onboarding-title">
+                Hola 👋 ¿Cómo estás?
+              </h2>
 
-          <div className="grid">
-            {EMOTIONS.map(e => (
+              <div className="onboarding-options-row">
+                <button className="onboarding-btn" onClick={next}>
+                  Bien!
+                </button>
+                <button className="onboarding-btn" onClick={next}>
+                  Prefiero no decirlo...
+                </button>
+              </div>
+            </>
+          )}
+
+          {/* STEP 1 */}
+          {step === 1 && (
+            <>
+              <h2 className="onboarding-title">
+                ¿Qué emoción te representa?
+              </h2>
+
+              <div className="onboarding-options-column">
+                {EMOTIONS.map(e => (
+                  <button
+                    className="onboarding-btn"
+                    key={e}
+                    onClick={() => {
+                      if (mode === "daily") {
+                        onFinish({ personality: e })
+                      } else {
+                        setData({ ...data, mood: e })
+                        next()
+                      }
+                    }}
+                  >
+                    {e}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+
+          {/* STEP 2 */}
+          {mode === "setup" && step === 2 && (
+            <>
+              <h2 className="onboarding-title">Elegí un color</h2>
+
+              <div className="onboarding-options-column">
+                {COLORS.map(c => (
+                  <button
+                    className="onboarding-btn"
+                    key={c}
+                    onClick={() => {
+                      setData({ ...data, color: c })
+                      next()
+                    }}
+                  >
+                    {c}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+
+          {/* STEP 3 */}
+          {mode === "setup" && step === 3 && (
+            <>
+              <h2 className="onboarding-title">
+                ¿Cómo querés llamarla?
+              </h2>
+
+              <input
+                className="onboarding-input"
+                placeholder="Nombre"
+                value={data.name}
+                onChange={e =>
+                  setData({ ...data, name: e.target.value })
+                }
+              />
+
               <button
-                className="onboarding-button"
-                key={e}
-                onClick={() => {
-                  if (mode === "daily") {
-                    onFinish({ personality: e })
-                  } else {
-                    setData({ ...data, mood: e })
-                    next()
-                  }
-                }}
+                className="onboarding-btn"
+                onClick={() =>
+                  onFinish({
+                    name: data.name,
+                    personality: data.mood,
+                    color: data.color
+                  })
+                }
               >
-                {e}
+                Crear mascota
               </button>
-            ))}
-          </div>
+            </>
+          )}
+
         </div>
-      )}
-
-      {/* STEP 2 - COLOR (solo setup) */}
-      {mode === "setup" && step === 2 && (
-        <div className="card fade">
-          <h2>Elegí un color</h2>
-
-          <div className="grid">
-            {COLORS.map(c => (
-              <button
-                className="onboarding-button"
-                key={c}
-                onClick={() => {
-                  setData({ ...data, color: c })
-                  next()
-                }}
-              >
-                {c}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* STEP 3 - NOMBRE (solo setup) */}
-      {mode === "setup" && step === 3 && (
-        <div className="card fade">
-          <h2>¿Cómo querés llamarla?</h2>
-
-          <input
-            className="onboarding-button"
-            placeholder="Nombre"
-            value={data.name}
-            onChange={e =>
-              setData({ ...data, name: e.target.value })
-            }
-          />
-
-          <button
-            className="onboarding-button"
-            onClick={() =>
-              onFinish({
-                name: data.name,
-                personality: data.mood,
-                color: data.color
-              })
-            }
-          >
-            Crear mascota
-          </button>
-        </div>
-      )}
-
+      </div>
     </div>
   )
 }

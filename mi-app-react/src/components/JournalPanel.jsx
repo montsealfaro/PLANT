@@ -9,8 +9,8 @@ const questions = [
   { text: "¿Podés darte un mimo hoy?", options: ["A) Sí, lo voy a hacer", "B) Debería hacerlo"] }
 ]
 
-export default function JournalPanel() {
-  const [step, setStep] = useState(0)
+export default function JournalPanel({ onClose }) {
+  const [step, setStep] = useState(-1)
   const [answers, setAnswers] = useState([])
   const [result, setResult] = useState("")
 
@@ -44,7 +44,6 @@ export default function JournalPanel() {
 
     setResult(finalText)
 
-    // 🔥 guardar journal
     saveDailyEntry({
       journal: {
         answers: finalAnswers,
@@ -56,25 +55,48 @@ export default function JournalPanel() {
   }
 
   return (
-    <div className="journal-chat">
-      {step < questions.length ? (
-        <div className="journal-bubble fade">
-          <h2>{questions[step].text}</h2>
+    <div className="journal-overlay">
+      <div className="journal-phone">
 
-          <div className="journal-options">
-            {questions[step].options.map((opt, i) => (
-              <button key={i} className="journal-btn" onClick={() => handleAnswer(opt)}>
-                {opt}
+        <div className="journal-main-card">
+
+          {/* 👇 ESTADO INICIAL */}
+          {step === -1 ? (
+            <>
+              <h2 className="journal-title">¿Querés registrar cómo te sentís?</h2>
+
+              <button
+                className="journal-start-btn"
+                onClick={() => setStep(0)}
+              >
+                Empezar
               </button>
-            ))}
-          </div>
+            </>
+          ) : step < questions.length ? (
+            <>
+              <h2 className="journal-title">{questions[step].text}</h2>
+
+              <div className="journal-options">
+                {questions[step].options.map((opt, i) => (
+                  <button
+                    key={i}
+                    className="journal-btn"
+                    onClick={() => handleAnswer(opt)}
+                  >
+                    {opt}
+                  </button>
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              <h2 className="journal-title">Tu reflexión de hoy</h2>
+              <p className="journal-result-text">{result}</p>
+            </>
+          )}
+
         </div>
-      ) : (
-        <div className="journal-result fade">
-          <h2>Tu reflexión de hoy</h2>
-          <p>{result}</p>
-        </div>
-      )}
+      </div>
     </div>
   )
 }

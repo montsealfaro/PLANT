@@ -1,43 +1,158 @@
 import { useEffect, useState } from "react"
 import { dailyTasks } from "./trackerConfig"
-import { isSameDay } from "./trackerLogic"
+
+const STORAGE_KEY = "daily_tracker_history"
+
+function getTodayKey() {
+  return new Date().toISOString().split("T")[0]
+}
 
 export default function useDailyTracker() {
+
   const [tasks, setTasks] = useState([])
 
-  useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("dailyTracker"))
+  // 🔥 LOAD
+  const loadTodayTasks = () => {
 
-    if (!saved || !isSameDay(saved.date, new Date())) {
+    const saved =
+      JSON.parse(
+        localStorage.getItem(STORAGE_KEY)
+      ) || {}
+
+    const today = getTodayKey()
+
+    // SI NO EXISTE EL DÍA
+    if (!saved[today]) {
+
       const freshTasks = dailyTasks.map(task => ({
-        ...task,
-        completed: false,
+        ...task
       }))
 
-      const data = {
-        date: new Date(),
+      saved[today] = {
+        date: today,
         tasks: freshTasks,
+        updatedAt: new Date().toISOString()
       }
 
-      localStorage.setItem("dailyTracker", JSON.stringify(data))
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(saved)
+      )
+
       setTasks(freshTasks)
+
     } else {
-      setTasks(saved.tasks)
+
+      setTasks(saved[today].tasks || [])
     }
+  }
+
+  useEffect(() => {
+    loadTodayTasks()
   }, [])
 
-  const completeTask = (id) => {
-    const updated = tasks.map(task =>
-      task.id === id ? { ...task, completed: true } : task
+  // 🔥 SAVE
+  const saveTasks = (updatedTasks) => {
+
+    const saved =
+      JSON.parse(
+        localStorage.getItem(STORAGE_KEY)
+      ) || {}
+
+    const today = getTodayKey()
+
+    saved[today] = {
+      ...(saved[today] || {}),
+      date: today,
+      tasks: updatedTasks,
+      updatedAt: new Date().toISOString()
+    }
+
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(saved)
     )
+  }
+
+  // 🔥 UPDATE PROGRESS
+  const updateProgress = (id, newValue) => {
+
+    const updated = tasks.map(task => {
+
+      if (task.id !== id)
+        return task
+
+      return {
+        ...task,
+
+        value:
+          Math.max(
+            0,
+            Math.min(newValue, task.goal)
+          ),
+
+        completed:
+          newValue >= task.goal
+      }
+    })
 
     setTasks(updated)
 
-    localStorage.setItem("dailyTracker", JSON.stringify({
-      date: new Date(),
-      tasks: updated,
-    }))
+    saveTasks(updated)
   }
 
-  return { tasks, completeTask }
+  // 🔥 INCREMENT
+  const incrementTask = (id) => {
+
+    const task =
+      tasks.find(t => t.id === id)
+
+    if (!task)
+      return
+
+    updateProgress(
+      id,
+      task.value + 1
+    )
+  }
+
+  // 🔥 DECREMENT
+  const decrementTask = (id) => {
+
+    const task =
+      tasks.find(t => t.id === id)
+
+    if (!task)
+      return
+
+    updateProgress(
+      id,
+      task.value - 1
+    )
+  }
+
+  // 🔥 STATS
+  const completed =
+    tasks.filter(t => t.completed).length
+
+  const progress =
+    tasks.length > 0
+      ? Math.round(
+          (completed / tasks.length) * 100
+        )
+      : 0
+
+  return {
+
+    tasks,
+
+    progress,
+    completed,
+
+    loadTodayTasks,
+
+    updateProgress,
+    incrementTask,
+    decrementTask
+  }
 }

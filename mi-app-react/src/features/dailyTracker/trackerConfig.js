@@ -1,26 +1,63 @@
 export const dailyTasks = [
+
   {
     id: "water",
-    label: "Tomar agua",
+    title: "Agua",
     icon: "💧",
+
+    value: 0,
+    goal: 15,
+
+    unit: "vasos",
+
     reward: 10,
+
+    color: "#7b5a47"
   },
+
   {
     id: "food",
-    label: "Comer suficiente",
+    title: "Comida",
     icon: "🍎",
+
+    value: 0,
+    goal: 10,
+
+    unit: "comidas",
+
     reward: 10,
+
+    color: "#93ab31"
   },
+
   {
     id: "walk",
-    label: "Caminar suficiente",
+    title: "Caminar",
     icon: "🚶",
+
+    value: 0,
+    goal: 12,
+
+    unit: "bloques",
+
     reward: 15,
+
+    color: "#b45a07"
   },
+
   {
     id: "sleep",
-    label: "Dormir suficiente",
+    title: "Dormir",
     icon: "😴",
+
+    value: 0,
+    goal: 8,
+
+    unit: "horas",
+
     reward: 20,
-  },
+
+    color: "#d17cb5"
+  }
+
 ]

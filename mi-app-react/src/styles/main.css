@@ -482,7 +482,7 @@ body {
   background: #0f172a;
 }
 
-.card {
+.onboarding-card-old {
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(20px);
   padding: 40px;
@@ -494,7 +494,7 @@ body {
 
 
 
-.grid {
+.memory-grid {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -584,7 +584,7 @@ body {
   text-align: center;
 }
 
-.grid {
+.pattern-grid {
   display: grid;
   gap: 8px;
   max-width: 300px;
@@ -1120,7 +1120,7 @@ canvas {
   font-family: Arial, sans-serif;
 }
 
-.grid {
+.game-grid {
   display: grid;
   gap: 8px;
   width: min(85vw, 360px);
@@ -1144,7 +1144,7 @@ canvas {
   box-shadow: 0 0 18px #ff00c8;
 }
 
-button {
+.global-button {
   padding: 12px 24px;
   border-radius: 14px;
   border: none;
@@ -2244,4 +2244,335 @@ button {
 
 .game-fullscreen {
   background: linear-gradient(135deg, #B3DFEC, #FFE1E7);
+}
+
+.journal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  
+}
+
+/* HEADER */
+.journal-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* TITULO GRANDE */
+.journal-big-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 20px 0 30px;
+}
+
+/* BOTON PRINCIPAL */
+.journal-start-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 16px;
+  border: none;
+
+  background: rgba(255,255,255,0.25);
+  backdrop-filter: blur(10px);
+
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.journal-start-btn:hover {
+  transform: scale(1.03);
+}
+
+/* PREGUNTAS */
+.journal-title {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.journal-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.journal-btn {
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+
+  background: rgba(255,255,255,0.3);
+  color: white;
+
+  cursor: pointer;
+}
+
+/* RESULTADO */
+.journal-result-text {
+  margin-top: 10px;
+}
+
+/* CLOSE */
+.close-btn {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+
+  border: none;
+  background: #2f5566;
+  color: white;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+}
+
+/* FONDO OSCURO */
+.journal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #05070d;
+}
+
+/* FRAME IPHONE */
+.journal-phone {
+  width: 390px;
+  height: 100vh;
+  border-radius: 32px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f5f5f5;
+}
+
+/* CARD ROSA */
+.journal-main-card {
+  width: 80%;
+  padding: 28px;
+  border-radius: 28px;
+
+  background: linear-gradient(135deg, #f6d5a7, #e8a6d7);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+
+  color: white;
+}
+
+/* HEADER */
+.journal-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.brain-icon {
+  font-size: 18px;
+}
+
+/* TITULO GRANDE */
+.journal-big-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 20px 0 30px;
+}
+
+/* BOTON PRINCIPAL */
+.journal-start-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 16px;
+  border: none;
+
+  background: rgba(255,255,255,0.25);
+  backdrop-filter: blur(10px);
+
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* PREGUNTAS */
+.journal-title {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.journal-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.journal-btn {
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+
+  background: rgba(255,255,255,0.3);
+  color: white;
+
+  cursor: pointer;
+}
+
+/* RESULTADO */
+.journal-result-text {
+  margin-top: 10px;
+}
+
+/* FONDO OSCURO GLOBAL */
+.onboarding-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* FRAME IPHONE */
+.onboarding-phone {
+  width: 420px;
+  height: 100vh;
+  border-radius: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f5f5f5;
+}
+
+/* CARD ROSA */
+.onboarding-card {
+  width: 80%;
+  padding: 28px;
+  border-radius: 28px;
+
+  background: linear-gradient(135deg, #f6d5a7, #e8a6d7);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+
+  color: white;
+}
+
+/* TITULO */
+.onboarding-title {
+  font-size: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* OPCIONES FILA (step 0) */
+.onboarding-options-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+/* OPCIONES COLUMNA */
+.onboarding-options-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* BOTONES */
+.onboarding-btn {
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+
+  background: rgba(255,255,255,0.3);
+  color: white;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.onboarding-btn:hover {
+  transform: scale(1.03);
+}
+
+/* INPUT */
+.onboarding-input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+  margin-bottom: 10px;
+
+  background: rgba(255,255,255,0.3);
+  color: white;
+}
+
+
+/* =========================
+   DAILY TRACKER ISOLATION
+========================= */
+
+.bottom-sheet * {
+  box-sizing: border-box;
+}
+
+.bottom-sheet button {
+  all: unset;
+}
+
+.mobile-drop,
+.sheet-close,
+.sheet-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.mobile-drop {
+  width: 64px !important;
+  height: 64px !important;
+  border-radius: 50% !important;
+}
+
+.mobile-tracker-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 14px !important;
+}
+
+.bottom-sheet {
+  position: fixed !important;
+  left: 50% !important;
+  bottom: 0 !important;
+  transform: translateX(-50%) translateY(100%) !important;
+
+  width: 100% !important;
+  max-width: 430px !important;
+  height: 92vh !important;
+
+  background: #f6f1ea !important;
+
+  z-index: 9999 !important;
+
+  overflow-y: auto !important;
+}
+
+.bottom-sheet.open {
+  transform:
+    translateX(-50%)
+    translateY(0) !important;
+}
+
+.sheet-content {
+  padding-bottom: 120px !important;
+}
+
+.mobile-tracker-card {
+  margin-top: 24px !important;
 }
