@@ -46,7 +46,7 @@ const DAILY_TRACKERS = [
 
 const STORAGE_KEY = "daily_trackers"
 const VITALITY_KEY = "pet_vitality"
-const HISTORY_KEY = "daily_history"
+
 
 function getTodayDate() {
   return new Date().toISOString().split("T")[0]
@@ -205,9 +205,9 @@ function Heatmap({
             )
 
           const intensity =
-            getIntensity(
-              history[day] || {}
-            )
+          getIntensity(
+            history[day]?.trackers || {}
+          )
 
           const color =
             getColor(intensity)
@@ -219,7 +219,7 @@ function Heatmap({
             day === todayKey
 
           const hasData =
-            !!history[day]
+            !!history[day]?.trackers
 
           return (
 
@@ -286,9 +286,6 @@ export default function TrackerMenu({
   const [vitality, setVitality] =
     useState(loadVitality())
 
-  const [history, setHistory] =
-    useState({})
-
   const [selectedDay, setSelectedDay] =
     useState(null)
 
@@ -306,19 +303,10 @@ export default function TrackerMenu({
 
   const detailRef = useRef(null)
 
-  const { saveDailyEntry } =
-    useDailyHistory()
-
-  useEffect(() => {
-
-    const saved =
-      localStorage.getItem(HISTORY_KEY)
-
-    if (saved) {
-      setHistory(JSON.parse(saved))
-    }
-
-  }, [])
+  const {
+  history,
+  saveDailyEntry
+} = useDailyHistory()
 
   useEffect(() => {
 
@@ -338,30 +326,13 @@ export default function TrackerMenu({
 
   }, [vitality])
 
-  useEffect(() => {
+useEffect(() => {
 
-    const today =
-      getTodayDate()
+  saveDailyEntry({
+    trackers: trackerData.progress
+  })
 
-    const newHistory = {
-      ...history,
-      [today]:
-        trackerData.progress
-    }
-
-    setHistory(newHistory)
-
-    localStorage.setItem(
-      HISTORY_KEY,
-      JSON.stringify(newHistory)
-    )
-
-    saveDailyEntry({
-      trackers:
-        trackerData.progress
-    })
-
-  }, [trackerData])
+}, [trackerData])
 
   // 🔥 SCROLL iPHONE
   useEffect(() => {
@@ -1219,8 +1190,8 @@ export default function TrackerMenu({
             </div>
 
             {Object.entries(
-              history[selectedDay] || {}
-            ).map(([key, value]) => {
+              history[selectedDay]?.trackers || {}
+              ).map(([key, value]) => {
 
               const tracker =
                 DAILY_TRACKERS.find(
@@ -1257,13 +1228,13 @@ export default function TrackerMenu({
 
                 color:
                   getDayFeedback(
-                    history[selectedDay]
+                   history[selectedDay]?.trackers
                   ).color
               }}
             >
               {
                 getDayFeedback(
-                  history[selectedDay]
+                history[selectedDay]?.trackers
                 ).text
               }
             </div>

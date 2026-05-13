@@ -1,10 +1,14 @@
 import { useState } from "react"
 import useDailyHistory from "../../hooks/useDailyHistory"
 
-function getMoodLevel(mood) {
-  if (!mood) return 0
+function getWellbeingLevel(dayData) {
 
-  const map = {
+  if (!dayData) return 0
+
+  let score = 0
+
+  // 🔵 MOOD
+  const moodMap = {
     muy_mal: 1,
     mal: 2,
     neutro: 3,
@@ -12,7 +16,95 @@ function getMoodLevel(mood) {
     muy_bien: 5
   }
 
-  return map[mood] || 0
+  const moodScore =
+    moodMap[dayData.mood] || 0
+
+  score += moodScore * 0.4
+
+  // 🟢 TRACKERS
+  const trackers =
+    dayData.trackers || {}
+
+  const trackerTotal =
+    (trackers.water || 0) +
+    (trackers.walk || 0) +
+    (trackers.food || 0) +
+    (trackers.sleep || 0)
+
+  const trackerMax =
+    2000 + 6000 + 2000 + 8
+
+  const trackerRatio =
+    trackerTotal / trackerMax
+
+  score += trackerRatio * 5 * 0.4
+
+  // 🟣 JOURNAL
+  if (
+    dayData.journal?.result ===
+    "positive"
+  ) {
+    score += 1
+  }
+
+  // 🔥 NORMALIZACIÓN
+  if (score <= 1) return 1
+  if (score <= 2) return 2
+  if (score <= 3) return 3
+  if (score <= 4) return 4
+
+  return 5
+}
+
+function getWellbeingMessage(dayData) {
+
+  if (!dayData) {
+    return {
+      text: "No hay registros de este día",
+      color: "#999"
+    }
+  }
+
+  const level =
+    getWellbeingLevel(dayData)
+
+  if (level === 1) {
+    return {
+      text:
+        "Fue un día bastante duro. Tu cuerpo y tu mente quedaron muy desatendidos.",
+      color: "#e74c3c"
+    }
+  }
+
+  if (level === 2) {
+    return {
+      text:
+        "Fue un día inestable. Hubo algo de esfuerzo, pero te costó sostenerte.",
+      color: "#f39c12"
+    }
+  }
+
+  if (level === 3) {
+    return {
+      text:
+        "Fue un día relativamente equilibrado. Hubo presencia y algo de autocuidado.",
+      color: "#cddc39"
+    }
+  }
+
+  if (level === 4) {
+    return {
+      text:
+        "Tuviste un buen día. Estuviste bastante conectada con tus necesidades.",
+      color: "#8bc34a"
+    }
+  }
+
+  return {
+    text:
+      "Fue un muy buen día. Hubo cuidado emocional, físico y mental de forma consistente.",
+    color: "#4caf50"
+  }
 }
 
 function getMonthDays(year, month) {
@@ -36,6 +128,8 @@ export default function CalendarView({ onClose }) {
   const [currentMonth, setCurrentMonth] = useState(today.getMonth())
   const [currentYear, setCurrentYear] = useState(today.getFullYear())
   const [selectedDate, setSelectedDate] = useState(null)
+  const [selectedHeatmapDay, setSelectedHeatmapDay] =
+  useState(null)
 
   const [direction, setDirection] = useState(0)
   const [touchStartX, setTouchStartX] = useState(null)
@@ -156,49 +250,157 @@ export default function CalendarView({ onClose }) {
           })}
         </div>
 
-        {/* 🟢 MOOD HEATMAP (CORRECTO LUGAR) */}
+
+{/* 🟢 WELLBEING HEATMAP */}
         <div
           className="mood-heatmap"
           style={{
             marginTop: "16px",
-            padding: "10px", // antes 12
+            padding: "10px",
             borderRadius: "14px",
             background: "rgba(0,0,0,0.05)",
-            transform: "scale(0.9)", // 🔥 reducción 10%
+            transform: "scale(0.9)",
             transformOrigin: "top center"
-            }}
+          }}
         >
-          <div style={{ marginBottom: "8px", fontWeight: "600" }}>
+
+          <div
+            style={{
+              marginBottom: "8px",
+              fontWeight: "600"
+            }}
+          >
             Tu bienestar este mes
           </div>
 
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(7, 1fr)",
-            gap: "6px"
-          }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(7, 1fr)",
+              gap: "6px"
+            }}
+          >
+
             {days.map((date) => {
-              const key = formatDate(date)
-              const mood = history[key]?.mood
-              const level = getMoodLevel(mood)
+
+              const key =
+                formatDate(date)
+
+              const dayData =
+                history[key]
+
+              const level =
+                getWellbeingLevel(dayData)
+
+              const isSelected =
+                selectedHeatmapDay === key
 
               return (
+
                 <div
                   key={`heat-${key}`}
+
+                  onClick={() => {
+                    if (dayData) {
+                      setSelectedHeatmapDay(key)
+                    }
+                  }}
+
                   style={{
                     width: "100%",
                     aspectRatio: "1",
+
                     borderRadius: "6px",
+
                     background:
                       level === 0
                         ? "rgba(0,0,0,0.08)"
-                        : `var(--mood-${level})`,
-                    opacity: level === 0 ? 0.3 : 1
+                        : level === 1
+                        ? "#e74c3c"
+                        : level === 2
+                        ? "#f39c12"
+                        : level === 3
+                        ? "#cddc39"
+                        : level === 4
+                        ? "#8bc34a"
+                        : "#4caf50",
+
+                    opacity:
+                      level === 0
+                        ? 0.3
+                        : 1,
+
+                    cursor:
+                      dayData
+                        ? "pointer"
+                        : "default",
+
+                    transition:
+                      "all .18s ease",
+
+                    transform:
+                      isSelected
+                        ? "scale(1.08)"
+                        : "scale(1)",
+
+                    boxShadow:
+                      isSelected
+                        ? "0 0 0 2px #222 inset"
+                        : "none"
                   }}
                 />
+
               )
             })}
           </div>
+
+          {/* 🔥 AUTO SUMMARY */}
+
+          {selectedHeatmapDay && (
+
+            <div
+              style={{
+                marginTop: "16px",
+
+                padding: "14px",
+
+                borderRadius: "12px",
+
+                background: "#fff",
+
+                fontSize: "14px",
+
+                lineHeight: 1.5,
+
+                color:
+                  getWellbeingMessage(
+                    history[selectedDate]
+                  ).color,
+
+                boxShadow:
+                  "0 4px 12px rgba(0,0,0,0.06)"
+              }}
+            >
+
+              <div
+                style={{
+                  fontWeight: "700",
+                  marginBottom: "6px"
+                }}
+              >
+                {selectedHeatmapDay}
+              </div>
+
+              {
+                getWellbeingMessage(
+                  history[selectedHeatmapDay]
+                ).text
+              }
+
+            </div>
+
+          )}
+
         </div>
 
         <button
